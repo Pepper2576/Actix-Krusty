@@ -5,4 +5,12 @@ edition = "2024"
 
 [dependencies]
 actix-web = "4.20.0"
+chrono = { version = "0.4.45", features = ["serde"] }
+rust_decimal = { version = "1.43.0", features = ["serde", "db-postgres"] }
 serde = { version = "1", features = ["derive"] }
+sqlx = { version = "0.9.1", features = ["postgres", "runtime-tokio", "tls-rustls", "macros", "uuid", "chrono", "rust_decimal", "json", "migrate", "sqlx-toml"] }
+uuid = { version = "1.29.3", features = ["v4", "v7", "serde"] }
+
+[[bin]]
+name = "krusty"
+path = "src/main.rs"
