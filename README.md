@@ -105,3 +105,28 @@ src/
 - Data is not persisted. Restarting the server resets it to the two example bookmarks.
 - A new bookmark's ID is the last bookmark's ID plus one. If you delete the newest bookmark, its ID is given to the next one you create.
 - URLs and other fields are not validated.
+
+## Next steps
+
+Ideas for where to take the project, roughly in order.
+
+### Fix the current limitations
+
+- [ ] **Stop reusing IDs.** Keep a `next_id` counter in `AppState` instead of working out the ID from the last bookmark, so a deleted bookmark's ID is never given out again.
+- [ ] **Validate input.** Reject an empty `title`, or a `url` that doesn't parse (for example with the [`url`](https://crates.io/crates/url) crate), with `400 Bad Request`.
+- [ ] **Persist bookmarks.** Store them in SQLite (with [`sqlx`](https://crates.io/crates/sqlx) or [`rusqlite`](https://crates.io/crates/rusqlite)) so they survive a restart.
+
+### Make it easier to work on
+
+- [ ] **Add tests.** There are none yet. `actix_web::test` can start the app in-process and call each endpoint, including the `404` cases.
+- [ ] **Set up CI.** Run `cargo fmt --check`, `cargo clippy` and `cargo test` on every push, for example with GitHub Actions.
+- [ ] **Load `.env` automatically** with [`dotenvy`](https://crates.io/crates/dotenvy), so `PORT` doesn't have to be set in the shell.
+- [ ] **Log requests** with actix-web's `middleware::Logger` and [`env_logger`](https://crates.io/crates/env_logger).
+- [ ] **Read `PORT` once.** `main.rs` reads it twice: once for the startup message and once to bind the server.
+
+### Improve the API
+
+- [ ] **Return errors as JSON**, for example `{"error": "Bookmark not found"}`, instead of plain text, so clients can parse every response the same way.
+- [ ] **Return `204 No Content` from `DELETE`**, the usual response when there's nothing to send back.
+- [ ] **Allow several tags per bookmark** by changing `tag: String` to `tags: Vec<String>`, and let `?tag=` match any of them.
+- [ ] **Paginate and search the list** with `limit` and `offset` parameters, plus a `q` parameter that matches titles and URLs.

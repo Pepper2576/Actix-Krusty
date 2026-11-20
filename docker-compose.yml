@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: krusty-sql
+    ports: ["5432:5432"]
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - krusty-data:/var/lib/postgresql/data
+    # Each list item is one argument. `--name=value` is Postgres's short form of `-c name=value`.
+    command:
+      - postgres
+      - --work_mem=64MB
+      - --max_parallel_workers=4
+      - --max_wal_size=16GB
+      - --checkpoint_completion_target=0.9
+      - --random_page_cost=1.1
+      - --effective_io_concurrency=200
+      - --shared_buffers=16GB
+      - --maintenance_work_mem=4GB
+      - --effective_cache_size=48GB
+
+volumes:
+  krusty-data:

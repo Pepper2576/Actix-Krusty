@@ -11,12 +11,8 @@ use std::env;
 async fn main() -> std::io::Result<()> {
     let state = web::Data::new(AppState::new());
 
-    println!(
-        "Starting server on port {}",
-        env::var("PORT").unwrap_or_else(|_| "8080".to_string())
-    );
-
     let port = env::var("PORT").unwrap_or_else(|_| "8080".to_string());
+    println!("Starting server on port {}", port);
 
     HttpServer::new(move || {
         App::new()
