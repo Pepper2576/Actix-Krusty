@@ -9,6 +9,7 @@ use std::env;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    dotenvy::dotenv().ok();
     let state = web::Data::new(AppState::new());
 
     let port = env::var("PORT").unwrap_or_else(|_| "8080".to_string());
